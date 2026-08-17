@@ -1,52 +1,82 @@
 import type { Metadata, Viewport } from "next";
+import { Fraunces, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { siteConfig } from "@/lib/constants";
 
-export const viewport: Viewport = {
-  themeColor: "#030208",
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 5,
-};
+const fraunces = Fraunces({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-display",
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-body",
+  weight: ["400", "500"],
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-mono",
+  weight: ["400", "500"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Website Đang Xây Dựng | Cosmic Launch - Hãy Trở Lại Sau",
-  description:
-    "Website đang trong quá trình nâng cấp và xây dựng hệ thống mới. Đăng ký email nhận thông báo khi ra mắt chính thức và kết nối với đội ngũ phát triển.",
-  keywords: [
-    "website đang xây dựng",
-    "coming soon landing page",
-    "under construction",
-    "thông báo ra mắt",
-    "đăng ký nhận tin",
-    "cosmic space landing page",
-  ],
-  authors: [{ name: "Space Innovation Team" }],
-  creator: "Nova Space",
-  publisher: "Nova Space",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: `${siteConfig.name} — Website sắp ra mắt`,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  applicationName: siteConfig.name,
+  authors: [{ name: siteConfig.fullName }],
+  creator: siteConfig.fullName,
+  publisher: siteConfig.legalName,
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
+  },
+  alternates: {
+    canonical: siteConfig.url,
   },
   openGraph: {
-    title: "Website Đang Xây Dựng | Vũ Trụ Đang Được Định Hình",
-    description:
-      "Một không gian số mang tính đột phá đang được hoàn thiện. Đăng ký nhận thông báo để trở thành những nhà du hành đầu tiên khi website chính thức ra mắt.",
     type: "website",
-    locale: "vi_VN",
-    alternateLocale: "en_US",
-    siteName: "Nova Cosmic Launch",
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: `${siteConfig.name} — Website sắp ra mắt`,
+    description: siteConfig.description,
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 1200,
+        height: 630,
+        alt: `${siteConfig.name} — Brand Strategy & Design`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Website Đang Xây Dựng | Cosmic Launch",
-    description:
-      "Website đang trong quá trình xây dựng. Đăng ký nhận thông báo khi website chính thức ra mắt.",
+    title: `${siteConfig.name} — Website sắp ra mắt`,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#07060B",
+  colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -56,27 +86,25 @@ export default function RootLayout({
 }) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Nova Space - Website Đang Xây Dựng",
-    description:
-      "Website đang trong giai đoạn phát triển và xây dựng. Nhận thông báo khi ra mắt.",
-    potentialAction: {
-      "@type": "CommunicateAction",
-      name: "Đăng ký nhận thông báo ra mắt",
-    },
+    "@type": "Organization",
+    name: siteConfig.name,
+    legalName: siteConfig.legalName,
+    url: siteConfig.url,
+    description: siteConfig.description,
   };
 
   return (
-    <html lang="vi" className="dark">
+    <html lang="vi" className={`${fraunces.variable} ${inter.variable} ${spaceGrotesk.variable}`}>
       <head>
         <script
           type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-[#030208] text-slate-100 antialiased min-h-screen" suppressHydrationWarning>
-        <GoogleAnalytics />
+      <body className="font-body antialiased">
         {children}
+        <GoogleAnalytics />
       </body>
     </html>
   );
