@@ -1,0 +1,6 @@
+{
+  "name": "Cosmic Launch - Trang Chờ Xây Dựng",
+  "description": "Trang landing page thông báo website đang xây dựng phong cách vũ trụ nghệ thuật tối giản, tối ưu SEO, tích hợp Google Analytics và form đăng ký nhận tin.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
